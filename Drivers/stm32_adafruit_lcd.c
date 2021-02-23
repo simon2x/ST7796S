@@ -283,28 +283,27 @@ void BSP_LCD_DisplayStringAt(uint16_t Xpos, uint16_t Ypos, uint8_t *Text, Line_M
   uint8_t  *ptr = Text;
   
   /* Get the text size */
-  while (*ptr++) size ++ ;
+  while (*ptr++) size++;
   
   /* Characters number per line */
-  xsize = (BSP_LCD_GetXSize()/DrawProp.pFont->Width);
+  xsize = (BSP_LCD_GetXSize() / DrawProp.pFont->Width);
   
   switch (Mode)
   {
   case CENTER_MODE:
     {
-      refcolumn = Xpos + ((xsize - size)* DrawProp.pFont->Width) / 2;
-      break;
-    }
-  case LEFT_MODE:
-    {
-      refcolumn = Xpos;
+      refcolumn = Xpos - ((size * DrawProp.pFont->Width) / 2);
+      Ypos -= DrawProp.pFont->Height / 2;
       break;
     }
   case RIGHT_MODE:
     {
-      refcolumn =  - Xpos + ((xsize - size)*DrawProp.pFont->Width);
+      refcolumn =  - Xpos + ((xsize - size) * DrawProp.pFont->Width);
       break;
-    }    
+    }
+//  case LEFT_MODE:
+//  case LEFT_MODE:
+  case LEFT_MODE:
   default:
     {
       refcolumn = Xpos;
@@ -328,12 +327,7 @@ void BSP_LCD_DisplayStringAt(uint16_t Xpos, uint16_t Ypos, uint8_t *Text, Line_M
 /**
   * @brief  Displays a character on the LCD.
   * @param  Line: Line where to display the character shape
-  *          This parameter can be one of the following values:
-  *            @arg  0..19: if the Current fonts is Font8
-  *            @arg  0..12: if the Current fonts is Font12
-  *            @arg  0...9: if the Current fonts is Font16
-  *            @arg  0...7: if the Current fonts is Font20
-  *            @arg  0...5: if the Current fonts is Font24
+  *         e.g. for Font24 and LCD height of 480, it is possible to fit 0..19
   * @param  ptr: Pointer to string to display on LCD
   * @retval None
   */
